@@ -9,3 +9,5 @@ https://coverr.co/
 
 https://easings.net/
 https://cubic-bezier.com/
+
+https://www.svgrepo.com/
