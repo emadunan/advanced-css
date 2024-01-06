@@ -13,3 +13,38 @@
   transform: translate(-50%, -50%);
   border-radius: 3px;
 }
+
+// MEDIA QUERY MANAGER
+/*
+0 - 600px     Phone
+600 - 900px   Tablet portrail
+900 - 1200px  Tablet landscape
+[1200 - 1800px] Normal style - This is the default to apply styles
+1800px + Big desktop
+*/
+
+@mixin respond($breakpoint) {
+  @if $breakpoint ==phone {
+    @media (max-width: 37.5em) {    // 600px
+      @content
+    }
+  }
+
+  @if $breakpoint ==tab-port {
+    @media (max-width: 56.25em) {   // 900px
+      @content
+    }
+  }
+
+  @if $breakpoint ==tab-land {      // 1200px
+    @media (max-width: 75em) {
+      @content
+    }
+  }
+
+  @if $breakpoint ==big-desktop {   // 1800px
+    @media (min-width: 112.5em) {
+      @content
+    }
+  }
+}
