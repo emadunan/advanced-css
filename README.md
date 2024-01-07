@@ -1,4 +1,6 @@
 # Advanced CSS course
+To check browser compatiblity
+https://caniuse.com/
 
 https://coolors.co/
 
