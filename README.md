@@ -17,6 +17,7 @@ https://cubic-bezier.com/
 
 SVG Icons
 https://www.svgrepo.com/
+https://icomoon.io/
 
 Test Responsivness
 https://sizzy.co/
