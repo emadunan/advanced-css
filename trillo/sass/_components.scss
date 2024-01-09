@@ -94,6 +94,43 @@
     background-color: var(--color-grey-light-3);
   }
 
+  &__menu {
+    position: absolute;
+    background-color: rgba($color: #fff, $alpha: .6);
+    color: var(--color-grey-dark-1);
+    font-size: 1.4rem;
+    font-weight: 600;
+    opacity: 0;
+    left: 0rem;
+    top: 7rem;
+    width: 100%;
+    transform-origin: 50% 0%;
+    transform: rotateX(90deg);
+    transition: all .4s;
+  }
+
+  &__user-list {
+    list-style: none;
+  }
+
+  &__user-item {
+    transition: background-color .2s;
+    padding: 1rem 2rem;
+  }
+
+  &__user-item:hover {
+    background-color: white;
+  }
+
+  &__user {
+    position: relative;
+
+    &:hover .user-nav__menu {
+      opacity: 1;
+      transform: rotate(0);
+    }
+  }
+
   &__icon-box {
     position: relative;
   }
@@ -581,5 +618,17 @@
   &:focus {
     outline: none;
     animation: pulsate 1s infinite;
+  }
+}
+
+@keyframes swingdown {
+  0% {
+    opacity: .99999;
+    transform: rotateX(90deg);
+  }
+
+  100% {
+    transform: rotate(0);
+    animation-timing-function: ease-in-out;
   }
 }
