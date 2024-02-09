@@ -86,26 +86,33 @@ export default function App() {
 
   useEffect(
     function () {
+      const controller = new AbortController();
+
       async function fetchMovies() {
         try {
           setIsloading(true);
           setError("");
 
           const response = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            {
+              signal: controller.signal,
+            }
           );
 
           if (!response.ok)
             throw new Error("Something went wrong with fetching movies");
 
           const data = await response.json();
-          console.log(data);
 
           if (data.Response === "False") throw new Error("Movie Not Found");
 
           setMovies(data.Search);
+          // setError("");
         } catch (err) {
-          setError(err.message);
+          if (err.name !== "AbortError") {
+            setError(err.message);
+          }
         } finally {
           setIsloading(false);
         }
@@ -117,11 +124,14 @@ export default function App() {
         return;
       }
 
-      const timer = setTimeout(() => {
-        fetchMovies();
-      }, 2000);
+      fetchMovies();
+      // const timer = setTimeout(() => {
+      // }, 1000);
 
-      return () => clearTimeout(timer);
+      return () => {
+        controller.abort();
+        // clearTimeout(timer);
+      };
     },
     [query]
   );
@@ -315,7 +325,12 @@ function Watched({ movie, onDeleteWatched }) {
           <span>{movie.runtime} min</span>
         </p>
       </div>
-      <button className="btn-delete" onClick={() => onDeleteWatched(movie.imdbID)}>X</button>
+      <button
+        className="btn-delete"
+        onClick={() => onDeleteWatched(movie.imdbID)}
+      >
+        X
+      </button>
     </li>
   );
 }
@@ -368,11 +383,9 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatch, watched }) {
 
         const data = await response.json();
         setMovie(data);
-        console.log(data);
 
         if (data.Response === "False") throw new Error("Movie Not Found");
       } catch (err) {
-        console.log(err.message);
       } finally {
         setIsloading(false);
       }
@@ -380,6 +393,31 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatch, watched }) {
 
     fetchMovie();
   }, [selectedId]);
+
+  useEffect(() => {
+    if (!title) return;
+
+    document.title = `Movie| ${title}`;
+
+    return () => {
+      document.title = "usePopcorn";
+    };
+  }, [title]);
+
+  useEffect(() => {
+    const callback = (e) => {
+      if (e.code === "Escape") {
+        onCloseMovie();
+        console.log(`${title} is closing by ${e.code}`);
+      }
+    };
+    
+    document.addEventListener("keydown", callback);
+
+    return () => {
+      document.removeEventListener("keydown", callback);
+    };
+  }, [onCloseMovie, title]);
 
   return (
     <div className="details">
@@ -389,7 +427,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatch, watched }) {
         <>
           <header>
             <button className="btn-back" onClick={onCloseMovie}>
-              &larr;
+              <span>&larr;</span>
             </button>
             <img src={poster} alt={`Poster of ${title}`} />
             <div className="details-overview">
