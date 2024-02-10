@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useMovies } from "./useMovies";
 import StarRating from "./StarRating";
 import { useLocalStorageState } from "./useLocalStorageState";
+import { useKeypress } from "./useKeypress";
 
 const KEY = "a5ca3234";
 
@@ -116,20 +117,11 @@ function Search({ query, setQuery }) {
     inputRef.current.focus();
   }, []);
 
-  useEffect(() => {
-    function callback(e) {
-      if (document.activeElement === inputRef.current) return;
-
-      if (e.code === "Enter") {
-        inputRef.current.focus();
-        setQuery("");
-      }
-    }
-
-    document.addEventListener("keydown", callback);
-
-    return () => document.removeEventListener("keydown", callback);
-  }, [setQuery]);
+  useKeypress("Enter", () => {
+    if (document.activeElement === inputRef.current) return;
+    inputRef.current.focus();
+    setQuery("");
+  });
 
   return (
     <input
@@ -265,6 +257,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatch, watched }) {
 
   const countRef = useRef(0);
 
+  useKeypress("Escape", onCloseMovie);
+
   const isWatched = watched.find((m) => m.imdbID === selectedId);
 
   const {
@@ -333,21 +327,6 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatch, watched }) {
       document.title = "usePopcorn";
     };
   }, [title]);
-
-  useEffect(() => {
-    const callback = (e) => {
-      if (e.code === "Escape") {
-        onCloseMovie();
-        console.log(`${title} is closing by ${e.code}`);
-      }
-    };
-
-    document.addEventListener("keydown", callback);
-
-    return () => {
-      document.removeEventListener("keydown", callback);
-    };
-  }, [onCloseMovie, title]);
 
   return (
     <div className="details">
