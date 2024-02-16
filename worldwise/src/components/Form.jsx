@@ -13,7 +13,7 @@ import Spinner from "./Spinner";
 import Message from "./Message";
 
 import ar from "date-fns/locale/ar";
-import { useAppContext } from "../context";
+import { useAppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 
 registerLocale("ar", ar);

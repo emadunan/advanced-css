@@ -1,7 +1,7 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import styles from "./City.module.css";
 import { useEffect, useState } from "react";
-import { useAppContext } from "../context";
+import { useAppContext } from "../context/AppContext";
 import Spinner from "./Spinner";
 import ButtonBack from "./ButtonBack";
 
