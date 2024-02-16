@@ -1,14 +1,22 @@
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 
 import { useEffect, useState } from "react";
+import DatePicker, { registerLocale } from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 import styles from "./Form.module.css";
 import Button from "./Button";
 import ButtonBack from "./ButtonBack";
 import { useUrlLocation } from "../hooks/useUrlLocation";
-import { useAppContext } from "../context";
 import Spinner from "./Spinner";
 import Message from "./Message";
+
+import ar from "date-fns/locale/ar";
+import { useAppContext } from "../context";
+import { useNavigate } from "react-router-dom";
+
+registerLocale("ar", ar);
 
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
@@ -26,13 +34,37 @@ function Form() {
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingForm, setIsLoadingForm] = useState(false);
   const [emoji, setEmoji] = useState(null);
-
   const [lat, lng] = useUrlLocation();
+  const { createCity, isLoading } = useAppContext();
+
+  const navigate = useNavigate();
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!cityName || !date) return;
+
+    const newCity = {
+      cityName,
+      country,
+      emoji,
+      date,
+      notes,
+      position: { lat, lng },
+    };
+
+    await createCity(newCity);
+
+    navigate("/app");
+  }
 
   useEffect(() => {
-    setIsLoading(true);
+    if (!lat || !lng) return;
+
+    setIsLoadingForm(true);
+
     setError(null);
     fetch(`${BASE_URL}?latitude=${lat}&longitude=${lng}`)
       .then((response) => response.json())
@@ -46,15 +78,21 @@ function Form() {
         setEmoji(convertToEmoji(countryCode));
       })
       .catch((err) => setError(err))
-      .finally(() => setIsLoading(false));
+      .finally(() => setIsLoadingForm(false));
   }, [lng, lat]);
 
-  if (isLoading) return <Spinner />;
+  if (isLoadingForm) return <Spinner />;
 
   if (error) return <Message message={error.message} />;
 
+  if (!lat || !lng)
+    return <Message message={"Neither latitude nor longitude was selected"} />;
+
   return (
-    <form className={styles.form}>
+    <form
+      className={`${styles.form} ${isLoading ? styles.loading : ""}`}
+      onSubmit={handleSubmit}
+    >
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
         <input
@@ -67,10 +105,12 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input
+        <DatePicker
           id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
+          selected={date}
+          onSelect={() => {}} //when day is clicked
+          onChange={(date) => setDate(date)} //only when value has changed
+          dateFormat="dd/MM/yyyy"
         />
       </div>
 
