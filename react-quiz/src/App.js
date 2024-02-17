@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-
+import { useQuizContext } from "./context/QuizContext";
 import Header from "./components/Header";
 import Main from "./components/Main";
 import Loader from "./components/Loader";
@@ -10,17 +9,9 @@ import NextButton from "./components/NextButton";
 import Progress from "./components/Progress";
 import FinishScreen from "./components/FinishScreen";
 import Timer from "./components/Timer";
-import { useQuizContext } from "./context/QuizContext";
 
 export default function App() {
-  const { status, index, questionsCount, dispatch } = useQuizContext();
-
-  useEffect(() => {
-    fetch("http://localhost:8000/questions")
-      .then((response) => response.json())
-      .then((data) => dispatch({ type: "dataRecieved", payload: data }))
-      .catch((_err) => dispatch({ type: "dataFailed" }));
-  }, []);
+  const { status, index, questionsCount } = useQuizContext();
 
   return (
     <div className="app">
