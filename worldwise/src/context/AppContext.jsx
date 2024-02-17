@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 
 const BASE_URL = "http://localhost:8000";
 
@@ -51,7 +57,7 @@ function AppContextProvider({ children }) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  function getCity(id) {
+  const getCity = useCallback(function getCity(id) {
     if (id.toString() === state.currentCity?.id) return;
 
     // setIsLoading(true);
@@ -61,7 +67,7 @@ function AppContextProvider({ children }) {
       .then((response) => response.json())
       .then((data) => dispatch({ type: "city/loaded", payload: data }))
       .catch((err) => dispatch({ type: "rejected", payload: err }));
-  }
+  }, [state.currentCity?.id]);
 
   async function createCity(city) {
     try {
