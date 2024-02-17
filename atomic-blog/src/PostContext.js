@@ -40,7 +40,7 @@ function PostProvider({ children }) {
     <PostContext.Provider
       value={{
         posts: searchedPosts,
-        onAddPosts: handleAddPost,
+        onAddPost: handleAddPost,
         onClearPosts: handleClearPosts,
         searchQuery,
         setSearchQuery,
