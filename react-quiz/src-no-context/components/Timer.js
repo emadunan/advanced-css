@@ -1,12 +1,8 @@
 import React, { useEffect } from "react";
-import { useQuizContext } from "../context/QuizContext";
 
-export default function Timer() {
-  const { dispatch, secondsRemaining } = useQuizContext();
-
+export default function Timer({ dispatch, secondsRemaining }) {
   const mins = Math.floor(secondsRemaining / 60);
   const secs = secondsRemaining % 60;
-  
   useEffect(() => {
     const timer = setInterval(() => {
       dispatch({ type: "tick" });
