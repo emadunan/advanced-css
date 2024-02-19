@@ -1,54 +1,67 @@
-const initialStateAccount = {
+import { createSlice } from "@reduxjs/toolkit";
+
+const host = "api.frankfurter.app";
+
+const initialState = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
   isLoading: false,
 };
 
-const host = "api.frankfurter.app";
+const accountSlice = createSlice({
+  name: "account",
+  initialState,
+  reducers: {
+    deposit(state, action) {
+      state.balance = state.balance + action.payload;
+      state.isLoading = false;
+    },
+    withdraw(state, { payload }) {
+      state.balance = state.balance - payload;
+    },
+    // Dispatched Action paramter ({ loanAmount, loanPurpose })
+    // requestLoan: function (state, action) {
+    //   if (state.loan > 0) return;
 
-export default function accountReducer(
-  state = initialStateAccount,
-  { type, payload }
-) {
-  switch (type) {
-    case "account/loading":
-      return { ...state, isLoading: true };
+    //   state.loan = action.payload.loanAmount;
+    //   state.loanPurpose = action.payload.loanPurpose;
+    //   state.balance += action.payload.loanAmount;
+    // },
+    requestLoan: {
+      prepare(amount, purpose) {
+        return {
+          payload: {
+            amount,
+            purpose,
+          },
+        };
+      },
+      reducer(state, action) {
+        if (state.loan > 0) return;
 
-    case "account/deposit":
-      return { ...state, isLoading: false, balance: state.balance + payload };
+        state.loan = action.payload.amount;
+        state.loanPurpose = action.payload.purpose;
+        state.balance += action.payload.amount;
+      },
+    },
+    payLoan(state, _action) {
+      state.balance -= state.loan;
+      state.loan = 0;
+      state.loanPurpose = "";
+    },
+    loading(state, _action) {
+      state.isLoading = true;
+    },
+  },
+});
 
-    case "account/withdraw":
-      return { ...state, balance: state.balance - payload };
+console.log(accountSlice);
 
-    case "account/requestLoan":
-      if (state.loan > 0) return state;
-      // LATER
-      return {
-        ...state,
-        loan: payload.amount,
-        loanPurpose: payload.purpose,
-        balance: state.balance + payload.amount,
-      };
+export const { withdraw, requestLoan, payLoan } = accountSlice.actions;
 
-    case "account/payLoan":
-      if (state.loan === 0) return;
-
-      return {
-        ...state,
-        loan: 0,
-        loanPurpose: "",
-        balance: state.balance - state.loan,
-      };
-
-    default:
-      // In Redux unlike normal reducers:
-      // It's adviced to return current state in case of unknown action.
-      // throw new Error("Unknown action type: " + type);
-      return state;
-  }
-}
-
+// Use the legacy way to create action thunk in combine with new redux-toolkit method
+// **********************************************************************************
 export function deposit(amount, currency) {
   console.log(amount, currency);
   if (currency === "USD") return { type: "account/deposit", payload: amount };
@@ -68,15 +81,80 @@ export function deposit(amount, currency) {
     dispatch({ type: "account/deposit", payload: converted });
   };
 }
+// **********************************************************************************
 
-export function withdraw(amount) {
-  return { type: "account/withdraw", payload: amount };
-}
+export default accountSlice.reducer;
 
-export function requestLoan(amount, purpose) {
-  return { type: "account/requestLoan", payload: { amount, purpose } };
-}
+// export default function accountReducer(
+//   state = initialState,
+//   { type, payload }
+// ) {
+//   switch (type) {
+//     case "account/loading":
+//       return { ...state, isLoading: true };
 
-export function payLoan() {
-  return { type: "account/payLoan" };
-}
+//     case "account/deposit":
+//       return { ...state, isLoading: false, balance: state.balance + payload };
+
+//     case "account/withdraw":
+//       return { ...state, balance: state.balance - payload };
+
+//     case "account/requestLoan":
+//       if (state.loan > 0) return state;
+//       // LATER
+//       return {
+//         ...state,
+//         loan: payload.amount,
+//         loanPurpose: payload.purpose,
+//         balance: state.balance + payload.amount,
+//       };
+
+//     case "account/payLoan":
+//       if (state.loan === 0) return;
+
+//       return {
+//         ...state,
+//         loan: 0,
+//         loanPurpose: "",
+//         balance: state.balance - state.loan,
+//       };
+
+//     default:
+//       // In Redux unlike normal reducers:
+//       // It's adviced to return current state in case of unknown action.
+//       // throw new Error("Unknown action type: " + type);
+//       return state;
+//   }
+// }
+
+// export function deposit(amount, currency) {
+//   console.log(amount, currency);
+//   if (currency === "USD") return { type: "account/deposit", payload: amount };
+
+//   return async function (dispatch, getState) {
+//     dispatch({ type: "account/loading" });
+
+//     // API call
+//     const response = await fetch(
+//       `https://${host}/latest?amount=${amount}&from=${currency}&to=USD`
+//     );
+
+//     const data = await response.json();
+//     const converted = data.rates.USD;
+
+//     // Finally dispatch the action after the async requests
+//     dispatch({ type: "account/deposit", payload: converted });
+//   };
+// }
+
+// export function withdraw(amount) {
+//   return { type: "account/withdraw", payload: amount };
+// }
+
+// export function requestLoan(amount, purpose) {
+//   return { type: "account/requestLoan", payload: { amount, purpose } };
+// }
+
+// export function payLoan() {
+//   return { type: "account/payLoan" };
+// }
