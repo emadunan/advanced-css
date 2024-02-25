@@ -1,6 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
-export const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
   :root {
     /* Indigo */
     --color-brand-50: #eef2ff;
@@ -143,3 +143,5 @@ export const GlobalStyle = createGlobalStyle`
     filter: grayscale(var(--image-grayscale)) opacity(var(--image-opacity));
   }
 `;
+
+export default GlobalStyle;
