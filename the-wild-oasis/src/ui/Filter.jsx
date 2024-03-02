@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 const StyledFilter = styled.div`
@@ -33,3 +34,41 @@ const FilterButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+const Filter = ({ filterField, options }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedValue = searchParams.get(filterField) || options[0].value;
+
+  function handleClick(value) {
+    // My solution to the BUG
+    // if (selectedValue !== value) {
+    //   searchParams.set(filterField, value);
+    //   searchParams.set("page", 1);
+    //   setSearchParams(searchParams);
+    //   return;
+    // }
+
+    // Jonas solution to the BUG
+    if (searchParams.get("page")) searchParams.set("page", 1);
+
+    searchParams.set(filterField, value);
+    setSearchParams(searchParams);
+  }
+
+  return (
+    <StyledFilter>
+      {options.map((option) => (
+        <FilterButton
+          key={option.value}
+          onClick={() => handleClick(option.value)}
+          active={option.value === selectedValue}
+          disabled={option.value === selectedValue}
+        >
+          {option.label}
+        </FilterButton>
+      ))}
+    </StyledFilter>
+  );
+};
+
+export default Filter;
