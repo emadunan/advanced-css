@@ -3,7 +3,7 @@ POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-  "email": "emadunan@moi.gov.eg",
+  "email": "walid@moi.gov.eg",
   "password": "password"
 }
 
