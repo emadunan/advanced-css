@@ -16,7 +16,7 @@ class SerializeInterceptor implements NestInterceptor {
   constructor(private dto: ClassConstructor) {}
 
   intercept(
-    context: ExecutionContext,
+    _context: ExecutionContext,
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
     // Run something before a request is handled

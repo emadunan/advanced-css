@@ -1,0 +1,23 @@
+### Signup user
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+  "email": "emadunan@moi.gov.eg",
+  "password": "password"
+}
+
+### Signin user
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+  "email": "sara@emad.com",
+  "password": "sara"
+}
+
+### Signout user
+POST http://localhost:3000/auth/signout
+
+### Who am i
+GET http://localhost:3000/auth/whoami

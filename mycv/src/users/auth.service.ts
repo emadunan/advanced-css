@@ -1,5 +1,5 @@
 import {
-  ConflictException,
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -20,7 +20,7 @@ export class AuthService {
     const found = await this.usersService.findAll(email);
 
     if (found.length)
-      throw new ConflictException('This email has already taken');
+      throw new BadRequestException('This email has already taken');
 
     // Hash the users password
     // Generate a salt
@@ -43,10 +43,14 @@ export class AuthService {
 
   async signin(providedEmail: string, providedPassword: string) {
     const [user] = await this.usersService.findAll(providedEmail);
+
     if (!user) throw new NotFoundException();
 
     const { password } = user;
+
     const [_hash, salt] = password.split('.');
+
+    if (!salt) throw new BadRequestException();
 
     const buffer = (await scrypt(providedPassword, salt, 32)) as Buffer;
     const hash = buffer.toString('hex') + '.' + salt;
