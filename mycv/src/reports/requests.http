@@ -1,0 +1,36 @@
+### Create a new report
+POST http://localhost:3000/reports
+Content-Type: application/json
+
+{
+  "price": 5000,
+  "make": "toyota",
+  "model": "corolla",
+  "year": 2022,
+  "lng": 31,
+  "lat": 31,
+  "mileage": 6500
+}
+
+### Create a new report
+PATCH http://localhost:3000/reports/6
+Content-Type: application/json
+
+{
+  "approved": true
+}
+
+### Signin user
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+  "email": "emadunan@moi.gov.eg",
+  "password": "password"
+}
+
+### Signout user
+POST http://localhost:3000/auth/signout
+
+### Who am i
+GET http://localhost:3000/auth/whoami

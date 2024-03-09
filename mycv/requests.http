@@ -3,7 +3,7 @@ POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-  "email": "walid@moi.gov.eg",
+  "email": "emadunan@moi.gov.eg",
   "password": "password"
 }
 
@@ -12,8 +12,8 @@ POST http://localhost:3000/auth/signin
 Content-Type: application/json
 
 {
-  "email": "sara@emad.com",
-  "password": "sara"
+  "email": "emadunan@moi.gov.eg",
+  "password": "password"
 }
 
 ### Signout user

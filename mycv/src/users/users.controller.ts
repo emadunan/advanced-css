@@ -27,10 +27,10 @@ export class UsersController {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
-    private config: ConfigService,
+    private configService: ConfigService,
   ) {
     // This is how you consume environment variables in Nestjs
-    console.log('DATABASE_NAME_NEST', config.get<string>('DB_NAME'));
+    console.log('DATABASE_NAME_NEST', configService.get<string>('DB_NAME'));
 
     // That works in Nestjs too, but must be in a class
     console.log('DATABASE_NAME_NODE', process.env.DB_NAME);
@@ -40,7 +40,10 @@ export class UsersController {
   @UseGuards(AuthGuard)
   whoami(@CurrentUser() currentUser: string) {
     // That works in Nestjs too, but must be in a class
-    console.log('DATABASE_NAME_NODE', process.env.DB_NAME);
+    console.log(
+      'DATABASE_NAME_NEST_ON_ROUTE',
+      this.configService.get<string>('DB_NAME'),
+    );
     return currentUser;
     // return this.usersService.find(session.userId);
   }
