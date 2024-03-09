@@ -19,6 +19,7 @@ import { UserDto } from './Dtos/user.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthGuard } from '../guards/auth.guard';
+import { ConfigService } from '@nestjs/config';
 
 @Serialize(UserDto)
 @Controller('auth')
@@ -26,11 +27,20 @@ export class UsersController {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
-  ) {}
+    private config: ConfigService,
+  ) {
+    // This is how you consume environment variables in Nestjs
+    console.log('DATABASE_NAME_NEST', config.get<string>('DB_NAME'));
+
+    // That works in Nestjs too, but must be in a class
+    console.log('DATABASE_NAME_NODE', process.env.DB_NAME);
+  }
 
   @Get('/whoami')
   @UseGuards(AuthGuard)
   whoami(@CurrentUser() currentUser: string) {
+    // That works in Nestjs too, but must be in a class
+    console.log('DATABASE_NAME_NODE', process.env.DB_NAME);
     return currentUser;
     // return this.usersService.find(session.userId);
   }
