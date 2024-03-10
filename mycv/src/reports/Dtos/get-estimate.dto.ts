@@ -5,38 +5,34 @@ import {
   IsString,
   Max,
   Min,
-  IsOptional,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 const date = new Date();
 const currentYear = date.getFullYear();
 
-export class CreateReportDto {
-  @IsNumber()
-  @Min(0)
-  @Max(10000000000)
-  price: number;
-
-  @IsOptional()
-  approved: boolean;
-
+export class GetEstimateDto {
   @IsString()
   make: string;
 
   @IsString()
   model: string;
 
+  @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @Min(1930)
   @Max(currentYear)
   year: string;
 
+  @Transform(({ value }) => parseFloat(value))
   @IsLongitude()
   lng: number;
 
+  @Transform(({ value }) => parseFloat(value))
   @IsLatitude()
   lat: number;
 
+  @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @Min(0)
   @Max(10000000)

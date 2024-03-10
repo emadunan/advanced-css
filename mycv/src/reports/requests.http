@@ -3,21 +3,21 @@ POST http://localhost:3000/reports
 Content-Type: application/json
 
 {
-  "price": 5000,
-  "make": "toyota",
-  "model": "corolla",
-  "year": 2022,
-  "lng": 31,
-  "lat": 31,
+  "price": 20000,
+  "make": "ford",
+  "model": "musrang",
+  "year": 1882,
+  "lng": 45,
+  "lat": 54,
   "mileage": 6500
 }
 
 ### Approve a report
-PATCH http://localhost:3000/reports/6
+PATCH http://localhost:3000/reports/1
 Content-Type: application/json
 
 {
-  "approved": true
+  "approved": false
 }
 
 ### Signup user
@@ -44,3 +44,7 @@ POST http://localhost:3000/auth/signout
 
 ### Who am i
 GET http://localhost:3000/auth/whoami
+
+
+### Get an estimate for an existting vehicle
+GET http://localhost:3000/reports?make=toyota&model=corolla&lng=0&lat=0&mileage=2000&year=1980
