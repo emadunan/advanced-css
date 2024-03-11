@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
 import { User } from './user.entity';
 import { NotFoundException } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -25,30 +26,9 @@ describe('UsersController', () => {
         } as User,
       ]);
     },
-    // create(email: string, password: string) {
-    //   return Promise.resolve({
-    //     id: 999,
-    //     email: 'emadunan@gmail.com',
-    //     password: 'hiworld',
-    //   } as User);
-    // },
-    // remove(id: number) {
-    //   return Promise.resolve({
-    //     id: 999,
-    //     email: 'emadunan@gmail.com',
-    //     password: 'hiworld',
-    //   } as User);
-    // },
   };
 
   const fakeAuthService: Partial<AuthService> = {
-    // signup(email: string, password: string) {
-    //   return Promise.resolve({
-    //     id: 999,
-    //     email: 'emadunan@gmail.com',
-    //     password: 'hiworld',
-    //   } as User);
-    // },
     signin(email: string, password: string) {
       return Promise.resolve({
         id: 1,
@@ -60,6 +40,7 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule],
       controllers: [UsersController],
       providers: [
         { provide: UsersService, useValue: fakeUsersService },

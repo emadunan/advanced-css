@@ -6,7 +6,7 @@ Content-Type: application/json
   "price": 20000,
   "make": "ford",
   "model": "musrang",
-  "year": 1882,
+  "year": 2000,
   "lng": 45,
   "lat": 54,
   "mileage": 6500
