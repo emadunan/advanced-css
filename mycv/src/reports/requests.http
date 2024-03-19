@@ -25,7 +25,7 @@ POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-  "email": "emadunan@moi.gov.eg",
+  "email": "emadunan2@moi.gov.eg",
   "password": "password"
 }
 
@@ -38,6 +38,9 @@ Content-Type: application/json
   "email": "emadunan@moi.gov.eg",
   "password": "password"
 }
+
+### Delete user
+DELETE http://localhost:3000/auth/3
 
 ### Signout user
 POST http://localhost:3000/auth/signout

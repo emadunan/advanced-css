@@ -93,6 +93,9 @@ export class UsersController {
 
   @Delete('/:id')
   async removeUser(@Param('id') id: string) {
-    return await this.usersService.remove(parseInt(id));
+    const user = await this.usersService.remove(parseInt(id));
+    console.log(user);
+    
+    return user;
   }
 }

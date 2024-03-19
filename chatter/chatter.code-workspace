@@ -1,0 +1,13 @@
+{
+  "folders": [
+	{
+		"name": "chatter-frontend",
+		"path": "./chatter-frontend"
+	},
+	{
+		"name": "chatter-backend",
+		"path": "./chatter-backend"
+	}
+],
+  "settings": {}
+}
