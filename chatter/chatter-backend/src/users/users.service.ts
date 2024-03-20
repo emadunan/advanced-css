@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { Repository } from 'typeorm';
@@ -31,13 +35,14 @@ export class UsersService {
   }
 
   async update(id: number, attrs: UpdateUserInput) {
+    if (attrs.password) {
+      attrs.password = await this.hashPassword(attrs.password);
+    }
     const user = await this.usersRepo.findOneBy({ id });
 
     if (!user) throw new NotFoundException('user not found');
 
-    Object.assign(user, attrs, {
-      password: await this.hashPassword(attrs.password),
-    });
+    Object.assign(user, attrs);
 
     return await this.usersRepo.save(user);
   }
@@ -48,5 +53,16 @@ export class UsersService {
     if (!user) throw new NotFoundException('user not found');
 
     return await this.usersRepo.remove(user);
+  }
+
+  async verifyUser(email: string, password: string) {
+    const user = await this.usersRepo.findOneBy({ email });
+    if (!user) throw new NotFoundException('user not found');
+
+    const passportIsValid = await bcrypt.compare(password, user.password);
+    if (!passportIsValid)
+      throw new UnauthorizedException('credentials are not valid');
+
+    return user;
   }
 }
