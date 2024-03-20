@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import Auth from "./Auth";
 import { Link as MUILink } from "@mui/material";
+import { useLogin } from "../../hooks/useLogin";
 
 const SignIn = () => {
+  const { login, error } = useLogin();
+
   async function handleLogin(creds: { email: string; password: string }) {
-    console.log(creds.email, creds.password);
+    login(creds);
   }
 
   return (

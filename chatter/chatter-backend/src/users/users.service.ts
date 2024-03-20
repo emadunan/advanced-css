@@ -34,6 +34,10 @@ export class UsersService {
     return await this.usersRepo.findOneBy({ id });
   }
 
+  async findOneByEmail(email: string) {
+    return await this.usersRepo.findOneBy({ email });
+  }
+
   async update(id: number, attrs: UpdateUserInput) {
     if (attrs.password) {
       attrs.password = await this.hashPassword(attrs.password);
