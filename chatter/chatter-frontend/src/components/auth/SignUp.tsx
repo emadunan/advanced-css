@@ -4,16 +4,19 @@ import { Link as MUILink } from "@mui/material";
 import { useCreateUser } from "../../hooks/useCreateUser";
 import { extractErrorMessage } from "../../utils/errors";
 import { useState } from "react";
+import { useLogin } from "../../hooks/useLogin";
 
 const SignUp = () => {
   const [createUser] = useCreateUser();
   const [error, setError] = useState("");
+  const { login } = useLogin();
 
   async function handleSignUp(creds: { email: string; password: string }) {
     try {
       const { email, password } = creds;
       await createUser({ variables: { createUserInput: { email, password } } });
       setError("");
+      login({ email, password });
     } catch (err: any) {
       const errorMessage = extractErrorMessage(err);
 

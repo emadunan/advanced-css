@@ -14,8 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ]),
       secretOrKey: configService.getOrThrow<string>('JWT_SECRET'),
     });
-
-    console.log('JwtStrategy RUN');
   }
 
   validate(payload: TokenPayload) {

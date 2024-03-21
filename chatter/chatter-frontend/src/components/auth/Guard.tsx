@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { useGetMe } from "../../hooks/useGetMe";
+import { execludedRoutes } from "../../constants/excluded-routes";
 
 interface GuardProps {
   children: JSX.Element;
@@ -7,9 +8,14 @@ interface GuardProps {
 
 const Guard: FC<GuardProps> = ({ children }) => {
   const { data: user } = useGetMe();
-  console.log(user);
-  
-  return children;
+
+  return (
+    <>
+      {execludedRoutes.includes(window.location.pathname)
+        ? children
+        : user && children}
+    </>
+  );
 };
 
 export default Guard;
