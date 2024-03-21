@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -19,11 +20,16 @@ export class UsersService {
   }
 
   async create(createUserInput: CreateUserInput) {
-    const user = this.usersRepo.create({
-      ...createUserInput,
-      password: await this.hashPassword(createUserInput.password),
-    });
-    return await this.usersRepo.save(user);
+    try {
+      const user = this.usersRepo.create({
+        ...createUserInput,
+        password: await this.hashPassword(createUserInput.password),
+      });
+
+      return await this.usersRepo.save(user);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   async findAll() {
@@ -61,9 +67,11 @@ export class UsersService {
 
   async verifyUser(email: string, password: string) {
     const user = await this.usersRepo.findOneBy({ email });
+
     if (!user) throw new NotFoundException('user not found');
 
     const passportIsValid = await bcrypt.compare(password, user.password);
+
     if (!passportIsValid)
       throw new UnauthorizedException('credentials are not valid');
 

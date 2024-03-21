@@ -13,37 +13,43 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    const user = this.usersService.findOneByEmail(createUserInput.email);
+  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    const user = await this.usersService.findOneByEmail(createUserInput.email);
     if (user) throw new BadRequestException('email already exists');
 
-    return this.usersService.create(createUserInput);
+    return await this.usersService.create(createUserInput);
   }
 
   @Query(() => [User], { name: 'users' })
   // @UseGuards(GqlAuthGuard)
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    return await this.usersService.findAll();
   }
 
   @Query(() => User, { name: 'user' })
-  @UseGuards(GqlAuthGuard)
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.findOne(id);
+  // @UseGuards(GqlAuthGuard)
+  async findOne(@Args('id', { type: () => Int }) id: number) {
+    return await this.usersService.findOne(id);
   }
 
   @Mutation(() => User)
   @UseGuards(GqlAuthGuard)
-  updateUser(
+  async updateUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
     @CurrentUser() user: TokenPayload,
   ) {
-    return this.usersService.update(+user.id, updateUserInput);
+    return await this.usersService.update(+user.id, updateUserInput);
   }
 
   @Mutation(() => User)
   @UseGuards(GqlAuthGuard)
-  removeUser(@CurrentUser() user: TokenPayload) {
-    return this.usersService.remove(+user.id);
+  async removeUser(@CurrentUser() user: TokenPayload) {
+    return await this.usersService.remove(+user.id);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => User, { name: 'me' })
+  getMe(@CurrentUser() user: TokenPayload) {
+    return user;
   }
 }
