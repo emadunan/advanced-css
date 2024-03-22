@@ -2,7 +2,7 @@ import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { API_URL } from "./urls";
 import { execludedRoutes } from "./excluded-routes";
-import router from "../components/routes";
+import { onLogout } from "../utils/onLogout";
 
 const logoutLink = onError(({ graphQLErrors }) => {
   if (
@@ -12,11 +12,7 @@ const logoutLink = onError(({ graphQLErrors }) => {
     console.log("gqlErrors", graphQLErrors);
     
     if (!execludedRoutes.includes(window.location.pathname)) {
-      // Redirect to the login page
-      router.navigate("/login");
-      
-      // Reset Apollo Client's store
-      // client.resetStore();
+      onLogout()
     }
   }
 });

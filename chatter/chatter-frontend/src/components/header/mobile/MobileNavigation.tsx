@@ -5,9 +5,11 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { FC, useState } from "react";
+import { Page } from "../../../interfaces/page.interface";
+import router from "../../routes";
 
 interface Props {
-  pages: string[];
+  pages: Page[];
 }
 
 const MobileNavigation: FC<Props> = ({ pages }) => {
@@ -53,8 +55,14 @@ const MobileNavigation: FC<Props> = ({ pages }) => {
           }}
         >
           {pages.map((page) => (
-            <MenuItem key={page} onClick={handleCloseNavMenu}>
-              <Typography textAlign="center">{page}</Typography>
+            <MenuItem
+              key={page.title}
+              onClick={() => {
+                router.navigate(page.path);
+                handleCloseNavMenu();
+              }}
+            >
+              <Typography textAlign="center">{page.title}</Typography>
             </MenuItem>
           ))}
         </Menu>
