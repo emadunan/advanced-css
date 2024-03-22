@@ -11,7 +11,7 @@ const useLogin = () => {
   const [error, setError] = useState<string>("");
 
   async function login(request: LoginRequest) {
-    const response = await fetch(`${API_URL}/auth/sign-in`, {
+    const response = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

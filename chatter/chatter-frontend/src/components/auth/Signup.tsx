@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
-import Auth from "./Auth";
 import { Link as MUILink } from "@mui/material";
 import { useCreateUser } from "../../hooks/useCreateUser";
 import { extractErrorMessage } from "../../utils/errors";
 import { useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
+import Auth from "./Auth";
 
-const SignUp = () => {
+const Signup = () => {
   const [createUser] = useCreateUser();
   const [error, setError] = useState("");
   const { login } = useLogin();
 
-  async function handleSignUp(creds: { email: string; password: string }) {
+  async function handleSignup(creds: { email: string; password: string }) {
     try {
       const { email, password } = creds;
       await createUser({ variables: { createUserInput: { email, password } } });
@@ -30,12 +30,12 @@ const SignUp = () => {
   }
 
   return (
-    <Auth submitLabel="Sign Up" onSubmit={handleSignUp} error={error}>
-      <Link to={"/sign-in"} style={{ alignSelf: "center" }}>
+    <Auth submitLabel="Sign Up" onSubmit={handleSignup} error={error}>
+      <Link to={"/login"} style={{ alignSelf: "center" }}>
         <MUILink>Log in</MUILink>
       </Link>
     </Auth>
   );
 };
 
-export default SignUp;
+export default Signup;

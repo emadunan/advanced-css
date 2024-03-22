@@ -12,7 +12,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signin(user: User, response: Response) {
+  async login(user: User, response: Response) {
     const expires = new Date();
 
     expires.setSeconds(
@@ -30,6 +30,13 @@ export class AuthService {
     response.cookie('Authentication', token, {
       httpOnly: true,
       expires,
+    });
+  }
+
+  async logout(response: Response) {
+    response.cookie('Authentication', '', {
+      httpOnly: true,
+      expires: new Date(),
     });
   }
 }

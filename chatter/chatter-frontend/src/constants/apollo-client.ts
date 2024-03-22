@@ -12,8 +12,8 @@ const logoutLink = onError(({ graphQLErrors }) => {
     console.log("gqlErrors", graphQLErrors);
     
     if (!execludedRoutes.includes(window.location.pathname)) {
-      // Redirect to the sign-in page
-      router.navigate("/sign-in");
+      // Redirect to the login page
+      router.navigate("/login");
       
       // Reset Apollo Client's store
       // client.resetStore();
