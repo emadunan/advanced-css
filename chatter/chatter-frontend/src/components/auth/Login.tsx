@@ -12,7 +12,7 @@ const Login = () => {
 
   return (
     <Auth submitLabel="login" onSubmit={handleLogin} error={error}>
-      <Link to={"/login"} style={{ alignSelf: "center" }}>
+      <Link to={"/signup"} style={{ alignSelf: "center" }}>
         <MUILink>Sign Up</MUILink>
       </Link>
     </Auth>
