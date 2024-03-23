@@ -5,6 +5,7 @@ import { extractErrorMessage } from "../../utils/errors";
 import { useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
 import Auth from "./Auth";
+import { UNKNOWN_ERROR_MESSAGE } from "../../constants/error";
 
 const Signup = () => {
   const [createUser] = useCreateUser();
@@ -25,7 +26,7 @@ const Signup = () => {
         return;
       }
 
-      setError("Unknown error occured.");
+      setError(UNKNOWN_ERROR_MESSAGE);
     }
   }
 
