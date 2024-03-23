@@ -1,4 +1,4 @@
-import router from "../components/routes";
+import router from "../components/router";
 import client from "../constants/apollo-client";
 import { authenticatedVar } from "../constants/authenticated";
 
@@ -7,7 +7,7 @@ export function onLogout() {
 
   // Redirect to the login page
   router.navigate("/login");
-      
+
   // Reset Apollo Client's store
   client.clearStore();
 }

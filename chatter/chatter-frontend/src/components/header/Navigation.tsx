@@ -2,7 +2,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { FC } from "react";
 import { Page } from "../../interfaces/page.interface";
-import router from "../routes";
+import router from "../router";
 
 interface Props {
   pages: Page[];

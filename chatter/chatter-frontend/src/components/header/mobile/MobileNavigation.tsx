@@ -6,7 +6,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { FC, useState } from "react";
 import { Page } from "../../../interfaces/page.interface";
-import router from "../../routes";
+import router from "../../router";
 
 interface Props {
   pages: Page[];
