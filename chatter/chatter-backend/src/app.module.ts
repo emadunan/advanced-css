@@ -10,6 +10,8 @@ import * as Joi from 'joi';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
+import { ChatsModule } from './chats/chats.module';
+import { Chat } from './chats/entities/chat.entity';
 
 @Module({
   imports: [
@@ -20,10 +22,15 @@ import { AuthModule } from './auth/auth.module';
       }),
     }),
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db.sqlite',
+      type: 'postgres',
+      host: '127.0.0.1',
+      port: 5433,
+      password: 'hijack',
+      username: 'postgres',
+      database: 'chatter',
       synchronize: true,
-      entities: [User],
+      logging: true,
+      entities: [User, Chat],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -52,6 +59,7 @@ import { AuthModule } from './auth/auth.module';
       inject: [ConfigService],
     }),
     AuthModule,
+    ChatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

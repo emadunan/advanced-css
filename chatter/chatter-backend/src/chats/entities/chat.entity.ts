@@ -4,12 +4,20 @@ import { Column, Entity } from 'typeorm';
 
 @ObjectType()
 @Entity()
-export class User extends AbstractEntity {
-  @Field(() => String, { description: 'email' })
+export class Chat extends AbstractEntity {
+  @Field()
   @Column()
-  email: string;
+  userId: number;
 
-  @Field(() => String, { description: 'passord' })
+  @Field()
   @Column()
-  password: string;
+  isPrivate: boolean;
+
+  @Field(() => [Number])
+  @Column()
+  userIds: number[];
+
+  @Field()
+  @Column()
+  name?: string;
 }
